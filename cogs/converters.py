@@ -5,10 +5,10 @@ from fnmatch import fnmatch
 from discord.ext import commands
 from random import choice, shuffle
 
+
 class Converters(commands.Cog):
     def __init__(self, client):
         self.client = client
-    teal=0x007f7f
     name = "converters"
     name_typable = name
     description = "Run some text through a converter to make it look funny!"
@@ -20,7 +20,7 @@ class Converters(commands.Cog):
         else:
             return arg
 
-    @commands.command(name="owo", help="Convert whatever text into owo-speak... oh god why did i make this", aliases=["uwu", "furry"], usage="<text to convert>")
+    @commands.command(name="owo")
     async def owoConverter(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         await ctx.send(
@@ -50,7 +50,7 @@ class Converters(commands.Cog):
             )
         )
 
-    @commands.command(name="blockify", help="Convert text into\n:regional_indicator_b: :regional_indicator_i: :regional_indicator_g: text.", aliases=["bigtext", "big"], usage="<text to convert>")
+    @commands.command(name="blockify")
     async def big_text(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         alphabet = "qwertyuiopasdfghjklzxcvbnm 1234567890"
@@ -87,7 +87,7 @@ class Converters(commands.Cog):
                         textlist.append(f":regional_indicator_{char.lower()}:")
         await ctx.send(" ".join(textlist).replace("\n ", "\n"))
 
-    @commands.command(name="greekify", help="Make words *look* Greek, but the pronunciation is still almost the same as in English.", usage="<text to convert>")
+    @commands.command(name="greekify")
     async def greekify(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         upper_alphabet = {
@@ -130,35 +130,37 @@ class Converters(commands.Cog):
             "Y": "Υ",
             "Z": "Ζ"
         }
-        lower_alphabet = {letter.lower(): upper_alphabet[letter].lower() for letter in upper_alphabet}
+        lower_alphabet = {
+            letter.lower(): upper_alphabet[letter].lower() for letter in upper_alphabet}
         alphabet = {**upper_alphabet, **lower_alphabet}
         for letter in alphabet:
             arg = arg.replace(letter, alphabet[letter])
         await ctx.send(arg)
 
-    @commands.command(name="stroke", help="Shuffle a message", aliases=["shuffle", "mixup"], usage="<text to convert>")
+    @commands.command(name="stroke")
     async def shuffle(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         to_shuffle = list(arg)
         shuffle(to_shuffle)
         await ctx.send("".join(to_shuffle))
 
-    @commands.command(name="strokebyword", help="Shuffle the individual words instead of the entire message.", usage="<text to convert>")
+    @commands.command(name="strokebyword")
     async def shufflebyword(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         words_to_shuffle = arg.split()
         for to_shuffle in range(len(words_to_shuffle)):
             words_to_shuffle[to_shuffle] = list(words_to_shuffle[to_shuffle])
             shuffle(words_to_shuffle[to_shuffle])
-            words_to_shuffle[to_shuffle] = "".join(words_to_shuffle[to_shuffle])
+            words_to_shuffle[to_shuffle] = "".join(
+                words_to_shuffle[to_shuffle])
         await ctx.send(" ".join(words_to_shuffle))
 
-    @commands.command(name="spacer", help="Insert spaces between every character", aliases=["space", "gaps"], usage="<text to convert>")
+    @commands.command(name="spacer")
     async def spacer(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         await ctx.send(" ".join(arg[i:i + 1] for i in range(0, len(arg), 1)))
 
-    @commands.command(name="wingdings", help="You heard what the River Person said.", aliases=["dings", "gaster", "wd"], usage="<text to convert>")
+    @commands.command(name="wingdings")
     async def dings(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         alphabet = {
@@ -195,7 +197,7 @@ class Converters(commands.Cog):
             to_convert = to_convert.replace(letter, alphabet[letter])
         await ctx.send(to_convert)
 
-    @commands.command(name="sga", help="Ever wanted to speak Enchanting Table?", aliases=["enchant", "enchantingtable"], usage="<text to convert>")
+    @commands.command(name="sga")
     async def sga(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         alphabet = {
@@ -246,7 +248,8 @@ In content: Must be 2000 or fewer in length.""":
         elif str(error) == "arg is a required argument that is missing.":
             await ctx.send("You didn't specify any text to convert!")
         else:
-            await ctx.send(f"Unhandled error occurred:\n```{error}```\nIf my developer (<@!686984544930365440>) is not here, please tell him what the error is so that he can add handling or fix the issue!")
+            await ctx.send(f"Unhandled error occurred:\n```{error}```")
+
 
 def setup(client):
     client.add_cog(Converters(client))

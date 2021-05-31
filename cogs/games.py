@@ -1,5 +1,6 @@
 from discord.ext import commands
-from random import choice, randint
+from random import choice
+
 
 class Games(commands.Cog):
     def __init__(self, client):
@@ -109,64 +110,8 @@ class Games(commands.Cog):
             await ctx.send(":8ball:You didn't ask the 8-ball anything.")
 
     @commands.command(name="roll", help="Roll some dice!", aliases=["dice"], usage="[number of dice (1)]\n[number of sides (6)]")
-    async def roll_dice(self, ctx, dice: int = 1, sides: int = 6):
-        if dice == 0:
-            response = "You didn't roll any dice."
-        elif sides == 0:
-            response = "You rolled thin air."
-        elif dice < 0:
-            response = "You rolled NaN dice and got [REDACTED]"
-        elif dice > 1000000:
-            response = f"{dice} dice? That's just silly."
-        elif sides < 0:
-            if dice == 1:
-                response = "You rolled a [ERROR]-sided die and got `DivideByZeroError`"
-            if dice > 1:
-                response = f"You rolled {dice} `err`-sided dice and got [NULL]"
-        elif sides > 1000000:
-            response = f"{sides}-sided dice? That's just silly."
-        else:
-            side_list = [side for side in range(1, sides)]
-            roll_results = [side_list[randint(0,side_list[-1]) - 1] for _ in range(dice)]
-            total = sum(roll_results)
-            if dice > 1:
-                if len(str(roll_results[:-1])[1:-1]) < 2000:
-                    response = f"{str(roll_results[:-1])[1:-1]}, and {roll_results[-1]}, totalling {total}"
-                else:
-                    response = f"a total of {total}"
-            else:
-                response = str(total)
-        await ctx.send(":game_die:You rolled " + response)
-
-    @commands.command(name="flip", help="Flip some coins!", aliases=["coin", "coinflip"], usage="[number of coins (1)]")
-    async def flip_coins(self, ctx, coins: int = 1):
-        if coins == 1:
-            response = f"You flipped a {choice(['head', 'tail'])}"
-        elif coins == 0:
-            response = "You flicked your thumb in the air."
-        elif coins == -1:
-            response = "You flipped a [REDACTED]"
-        elif coins < -1:
-            response = "You flipped NaN heads and [ERROR] tails."
-        else:
-            if coins > 1000000:
-                response = f"{coins} coins? That's just silly."
-            else:
-                results = [randint(0,2) for _ in range(coins)]
-                for _ in range(10):
-                    if 2 in results:
-                        for result in range(len(results)):
-                            if results[result] == 2:
-                                results[result] = randint(0,2)
-                if results.count(2) > 0:
-                    if results.count(2) == 1:
-                        response = ", and a coin even landed on its edge."
-                    else:
-                        response = f", and {results.count(2)} coins landed on their edges."
-                else:
-                    response = "."
-                response = f"You flipped {results.count(0)} heads and {results.count(1)} tails{response}"
-        await ctx.send(":moneybag:" + response)
+    async def roll_dice(self, ctx):
+        await ctx.send(":game_die:You rolled " + choice("You rolled NaN dice and got [REDACTED]", "You rolled an [ERROR]-sided die and got `DivideByZeroError`", "You rolled 0xbadc0de `err`-sided dice and got [NULL]"))
 
     @commands.command(name="draw", help="Draw some cards!", aliases=["card"], usage="[number of cards (1)]\n[replace cards in deck (False)]")
     async def draw_cards(self, ctx, cards: int = 1, replace_cards: bool = False):
@@ -198,7 +143,8 @@ class Games(commands.Cog):
         if replace_cards:
             for _ in range(cards):
                 random_value = str(choice(list(values.values())))
-                card = str(random_value + (" " * (6 - len(random_value))) + "of " + choice(suits))
+                card = str(
+                    random_value + (" " * (6 - len(random_value))) + "of " + choice(suits))
                 if card[1] == "0" or card[1] == "1" or card[1] == "2" or card[1] == "3":
                     faces.append(card)
                 else:
@@ -217,7 +163,8 @@ class Games(commands.Cog):
                         length = 5
                     else:
                         length = 1
-                    all_cards.append(str(values[value]) + (" " * (6 - length)) + "of " + suits[suit])
+                    all_cards.append(
+                        str(values[value]) + (" " * (6 - length)) + "of " + suits[suit])
             if cards > 52:
                 await ctx.send(":black_joker:You can't draw more than the entire deck!")
                 return
@@ -268,12 +215,12 @@ class Games(commands.Cog):
             return
         sheet = ""
         for _ in range(height):
-            sheet = sheet + str(["||pop||" for _ in range(width)])[1:-1].replace("'", "").replace(", ", "") + "\n"
+            sheet = sheet + str(["||pop||" for _ in range(width)]
+                                )[1:-1].replace("'", "").replace(", ", "") + "\n"
         await ctx.send(sheet)
 
     @magic_8_ball.error
     @roll_dice.error
-    @flip_coins.error
     @draw_cards.error
     @bubblewrap.error
     async def error(self, ctx, error):
@@ -281,7 +228,8 @@ class Games(commands.Cog):
 In content: Must be 2000 or fewer in length.""":
             await ctx.send("Sorry, you specified numbers that were too large. Sending all that would put me over the 2000-character limit!")
         else:
-            await ctx.send(f"Unhandled error occurred:\n```{error}```\nIf my developer (<@!686984544930365440>) is not here, please tell him what the error is so that he can add handling or fix the issue!")
+            await ctx.send(f"Unhandled error occurred:\n```{error}```")
+
 
 def setup(client):
     client.add_cog(Games(client))
