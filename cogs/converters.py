@@ -11,8 +11,6 @@ class Converters(commands.Cog):
         self.client = client
     name = "converters"
     name_typable = name
-    description = "Run some text through a converter to make it look funny!"
-    description_long = description
 
     async def test_for_content(self, ctx, arg):
         if not arg:

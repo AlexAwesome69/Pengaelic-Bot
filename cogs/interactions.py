@@ -9,13 +9,11 @@ class Interactions(commands.Cog):
         self.formatChars = "*`~|"
     name = "interactions"
     name_typable = name
-    description = "Interact with other server members!"
-    description_long = description
 
     async def vact(self, ctx, act, actee):
         await ctx.send(f"*He {act}s {actee}.*")
 
-    @commands.command(name="slap", help="Slap someone!")
+    @commands.command(name="slap")
     async def slap(self, ctx, *, slap):
         await self.vact(
             ctx,
@@ -23,7 +21,7 @@ class Interactions(commands.Cog):
             slap
         )
 
-    @commands.command(name="stab", help="Stab someone!")
+    @commands.command(name="stab")
     async def stab(self, ctx, *, stab):
         await self.vact(
             ctx,
@@ -31,7 +29,7 @@ class Interactions(commands.Cog):
             stab
         )
 
-    @commands.command(name="shoot", help="Shoot someone!")
+    @commands.command(name="shoot")
     async def shoot(self, ctx, *, shoot):
         await self.vact(
             ctx,

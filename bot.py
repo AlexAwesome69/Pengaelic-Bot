@@ -45,51 +45,37 @@ client = commands.Bot(
 def help_menu(cog, client):
     menu = discord.Embed(
         title=cog.name.capitalize(),
-        description=cog.description_long,
         color=0x007f7f
     ).set_footer(
         text=f"Command prefix is {client.command_prefix}\n<arg> = required parameter\n[arg] = optional parameter\n[arg (value)] = default value for optional parameter\n(command/command/command) = all aliases you can run the command with"
     )
     for command in cog.get_commands():
-        if command.usage:
-            menu.add_field(
-                name="({})\n{}".format(
-                    str([command.name] + command.aliases)[1:-
-                                                          1].replace("'", "").replace(", ", "/"),
-                    command.usage
-                ),
-                value=command.help
-            )
-        else:
-            menu.add_field(
-                name="({})".format(
-                    str([command.name] + command.aliases)[1:-
-                                                          1].replace("'", "").replace(", ", "/")
-                ),
-                value=command.help
-            )
+        menu.add_field(
+            name="({})".format(
+                str([command.name] + command.aliases)[1:-
+                                                      1].replace("'", "").replace(", ", "/")
+            ),
+            value=""
+        )
     return menu
 
 
-@commands.command(name="tupper", help="I'll repeat whatever you tell me.", pass_context=True, usage="<message>")
+@commands.command(name="tupper", pass_context=True)
 async def say_back(self, ctx, *, arg):
     await ctx.send(arg)
-    if not isinstance(ctx.channel, discord.channel.DMChannel):
-        await ctx.message.delete()
+    await ctx.message.delete()
 
 
 @client.event
 async def on_ready():
     print(f"{client.description} connected to Discord")
 
-# load token
+# load .env
 dotenv(".env")
-DISCORD_TOKEN = env("DISCORD_TOKEN")
-
-print("Loaded bot token")
+print("Loaded .env")
 
 
-@client.group(name="help", help="Show this message", aliases=["commands", "h", "?"])
+@client.group(name="help")
 async def help(ctx, *, cogname: str = None):
     if cogname == None:
         menu = discord.Embed(
@@ -101,7 +87,7 @@ async def help(ctx, *, cogname: str = None):
         for cog in cogs:
             menu.add_field(
                 name=cogs[cog].name.capitalize(),
-                value=cogs[cog].description
+                value=""
             )
         menu.add_field(
             name="Links",
