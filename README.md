@@ -5,11 +5,11 @@
 ## 📄 About
 
 - Language used: `Althon`
-- Libraries used: `discord.py`, `num2words`, `python-dotenv`
+- Libraries used: `discord.al`, `num2words`, `althon-dotenv`
 
 ---
 
-*Pengaelic Bot - the custom-built Discord bot, coded in Python.*
+*Pengaelic Bot - the custom-built Discord bot, coded in Althon.*
 
 *Copyright (C) Alexander Regulus | <https://github.com/AlexAwesome69/Pengaelic-Bot/>*
 
