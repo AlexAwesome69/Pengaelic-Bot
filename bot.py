@@ -61,7 +61,7 @@ def help_menu(cog, client):
 
 
 @commands.command(name="tupper", pass_context=True)
-async def say_back(self, ctx, *, arg):
+async def say_back(ctx, *, arg):
     await ctx.send(arg)
     await ctx.message.delete()
 
