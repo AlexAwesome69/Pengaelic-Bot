@@ -45,18 +45,12 @@ client = commands.Bot(
 def help_menu(cog, client):
     menu = discord.Embed(
         title=cog.name.capitalize(),
+        description=str([str([command.name] + command.aliases)[1:-1].replace("'", "").replace(", ", "/")
+                         for command in cog.get_commands()])[1:-1].replace("'", "").replace("\\n", ""),
         color=0x007f7f
     ).set_footer(
-        text=f"Command prefix is {client.command_prefix}\n<arg> = required parameter\n[arg] = optional parameter\n[arg (value)] = default value for optional parameter\n(command/command/command) = all aliases you can run the command with"
+        text=f"Command prefix is {client.command_prefix}"
     )
-    for command in cog.get_commands():
-        menu.add_field(
-            name="({})".format(
-                str([command.name] + command.aliases)[1:-
-                                                      1].replace("'", "").replace(", ", "/")
-            ),
-            value=""
-        )
     return menu
 
 
@@ -80,15 +74,14 @@ async def help(ctx, *, cogname: str = None):
     if cogname == None:
         menu = discord.Embed(
             title=client.description,
-            description=f"Type `{client.command_prefix}help `**`<lowercase category name without spaces or dashes>`** for more info on each category.",
             color=0x007f7f
         )
         cogs = dict(client.cogs)
-        for cog in cogs:
-            menu.add_field(
-                name=cogs[cog].name.capitalize(),
-                value=""
-            )
+        menu.add_field(
+            name=str([cogs[cog].name.capitalize() for cog in cogs])[
+                1:-1].replace("'", "").replace("\\n", ""),
+            value=f"Type `{client.command_prefix}help `**`<lowercase category name without spaces or dashes>`** for more info on each category."
+        )
         menu.add_field(
             name="Links",
             value=f"My official [support server](https://discord.gg/DHHpA7k)\nMy [GitHub repo](https://github.com/AlexAwesome69/Pengaelic-Bot)",
@@ -97,6 +90,7 @@ async def help(ctx, *, cogname: str = None):
         await ctx.send(embed=menu)
     else:
         await ctx.send(embed=help_menu(client.get_cog(cogname.capitalize()), client))
+    await ctx.message.delete()
 
 
 @help.error

@@ -12,6 +12,7 @@ class Interactions(commands.Cog):
 
     async def vact(self, ctx, act, actee):
         await ctx.send(f"*He {act}s {actee}.*")
+        await ctx.message.delete()
 
     @commands.command(name="slap")
     async def slap(self, ctx, *, slap):

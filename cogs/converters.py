@@ -47,6 +47,7 @@ class Converters(commands.Cog):
                 ]
             )
         )
+        await ctx.message.delete()
 
     @commands.command(name="blockify")
     async def big_text(self, ctx, *, arg=None):
@@ -84,6 +85,7 @@ class Converters(commands.Cog):
                     else:
                         textlist.append(f":regional_indicator_{char.lower()}:")
         await ctx.send(" ".join(textlist).replace("\n ", "\n"))
+        await ctx.message.delete()
 
     @commands.command(name="greekify")
     async def greekify(self, ctx, *, arg=None):
@@ -134,6 +136,7 @@ class Converters(commands.Cog):
         for letter in alphabet:
             arg = arg.replace(letter, alphabet[letter])
         await ctx.send(arg)
+        await ctx.message.delete()
 
     @commands.command(name="stroke")
     async def shuffle(self, ctx, *, arg=None):
@@ -141,6 +144,7 @@ class Converters(commands.Cog):
         to_shuffle = list(arg)
         shuffle(to_shuffle)
         await ctx.send("".join(to_shuffle))
+        await ctx.message.delete()
 
     @commands.command(name="strokebyword")
     async def shufflebyword(self, ctx, *, arg=None):
@@ -152,11 +156,13 @@ class Converters(commands.Cog):
             words_to_shuffle[to_shuffle] = "".join(
                 words_to_shuffle[to_shuffle])
         await ctx.send(" ".join(words_to_shuffle))
+        await ctx.message.delete()
 
     @commands.command(name="spacer")
     async def spacer(self, ctx, *, arg=None):
         arg = await self.test_for_content(ctx, arg)
         await ctx.send(" ".join(arg[i:i + 1] for i in range(0, len(arg), 1)))
+        await ctx.message.delete()
 
     @commands.command(name="wingdings")
     async def dings(self, ctx, *, arg=None):
@@ -194,6 +200,7 @@ class Converters(commands.Cog):
         for letter in alphabet:
             to_convert = to_convert.replace(letter, alphabet[letter])
         await ctx.send(to_convert)
+        await ctx.message.delete()
 
     @commands.command(name="sga")
     async def sga(self, ctx, *, arg=None):
@@ -230,6 +237,7 @@ class Converters(commands.Cog):
         for letter in alphabet:
             to_convert = to_convert.replace(letter, alphabet[letter])
         await ctx.send(to_convert)
+        await ctx.message.delete()
 
     @owoConverter.error
     @big_text.error

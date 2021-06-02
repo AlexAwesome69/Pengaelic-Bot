@@ -22,12 +22,14 @@ class Tools(commands.Cog):
     @commands.command(name="test")
     async def test(self, ctx):
         await ctx.send("Yep, I'm alive :sunglasses:")
+        await ctx.message.delete()
 
     @commands.command(name="clear")
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, msgcount: int = 5):
         await ctx.channel.purge(limit=msgcount + 1)
         await ctx.send(f"{msgcount} messages deleted.")
+        await ctx.message.delete()
 
     @commands.command(name="garden")
     @commands.has_permissions(manage_messages=True)
@@ -65,6 +67,7 @@ class Tools(commands.Cog):
             )
         )
         await ctx.send(f'```json\n"garden information": {jsoninfo}```')
+        await ctx.message.delete()
 
     @clear.error
     async def clearError(self, ctx, error):
